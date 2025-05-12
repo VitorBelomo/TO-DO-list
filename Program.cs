@@ -49,7 +49,7 @@ class Program
 
     static void AdicionarTarefa()
     {
-        Console.Write("Título: ");
+        Console.Write("Título da tarefa: ");
         string titulo = Console.ReadLine();
         Console.Write("Descrição: ");
         string descricao = Console.ReadLine();
@@ -104,7 +104,8 @@ class Program
 
     static void ExcluirTarefa()
     {
-        Console.Write("ID da tarefa a excluir: ");
+        ListarTarefas();
+        Console.Write("Escolha uma tarefa para excluir: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
             var tarefa = tarefas.Find(t => t.Id == id);
