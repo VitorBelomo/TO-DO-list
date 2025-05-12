@@ -135,14 +135,20 @@ class Program
         }
     }
 
-    static void ExcluirTarefa()
+static void ExcluirTarefa()
+{
+    ListarTarefas();
+    Console.Write("Escolha uma tarefa para excluir: ");
+    if (int.TryParse(Console.ReadLine(), out int id))
     {
-        ListarTarefas();
-        Console.Write("Escolha uma tarefa para excluir: ");
-        if (int.TryParse(Console.ReadLine(), out int id))
+        var tarefa = tarefas.Find(t => t.Id == id);
+        if (tarefa != null)
         {
-            var tarefa = tarefas.Find(t => t.Id == id);
-            if (tarefa != null)
+            Console.WriteLine($"\nVocê realmente deseja excluir a tarefa \"{tarefa.Titulo}\"?");
+            Console.Write("Digite 's' para confirmar ou qualquer outra tecla para cancelar: ");
+            string confirmacao = Console.ReadLine()?.Trim().ToLower();
+
+            if (confirmacao == "s")
             {
                 tarefas.Remove(tarefa);
                 SalvarTarefas();
@@ -150,10 +156,20 @@ class Program
             }
             else
             {
-                Console.WriteLine("Tarefa não encontrada.");
+                Console.WriteLine("Exclusão cancelada.");
             }
         }
+        else
+        {
+            Console.WriteLine("Tarefa não encontrada.");
+        }
     }
+    else
+    {
+        Console.WriteLine("ID inválido.");
+    }
+}
+
 
     static void SalvarTarefas()
     {
