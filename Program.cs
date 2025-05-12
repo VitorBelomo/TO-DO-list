@@ -28,7 +28,8 @@ class Program
             Console.WriteLine("2. Listar Tarefas");
             Console.WriteLine("3. Marcar Tarefa como Concluída");
             Console.WriteLine("4. Excluir Tarefa");
-            Console.WriteLine("5. Sair");
+            Console.WriteLine("5. Editar Tarefa");
+            Console.WriteLine("6. Sair");
             Console.Write("Escolha uma opção: ");
             var opcao = Console.ReadLine();
 
@@ -38,7 +39,8 @@ class Program
                 case "2": ListarTarefas(); break;
                 case "3": ConcluirTarefa(); break;
                 case "4": ExcluirTarefa(); break;
-                case "5": return;
+                case "5": EditarTarefa(); break;
+                case "6": return;
                 default: Console.WriteLine("Opção inválida."); break;
             }
 
@@ -46,6 +48,36 @@ class Program
             Console.ReadKey();
         }
     }
+    static void EditarTarefa()
+{
+    ListarTarefas();
+    Console.Write("Selecione uma tarefa para Editar: ");
+    if (int.TryParse(Console.ReadLine(), out int id))
+    {
+        var tarefa = tarefas.Find(t => t.Id == id);
+        if (tarefa != null)
+        {
+            Console.Write($"Título atual: {tarefa.Titulo} \nDigite o novo título ou pressione Enter para manter: ");
+            string novoTitulo = Console.ReadLine();
+            if (!string.IsNullOrEmpty(novoTitulo)) 
+            {
+                tarefa.Titulo = novoTitulo;
+            }
+            Console.Write($"Descrição atual: {tarefa.Descricao} \nDigite a nova descrição ou pressione Enter para manter: ");
+            string novaDescricao = Console.ReadLine();
+            if (!string.IsNullOrEmpty(novaDescricao)) 
+            {
+                tarefa.Descricao = novaDescricao;
+            }
+            SalvarTarefas();
+            Console.WriteLine("Tarefa atualizada com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine("Tarefa não encontrada.");
+        }
+    }
+}
 
     static void AdicionarTarefa()
     {
@@ -54,7 +86,7 @@ class Program
         Console.Write("Descrição: ");
         string descricao = Console.ReadLine();
 
-        int novoId = tarefas.Count > 0 ? tarefas[^1].Id + 1 : 1;
+        int novoId = tarefas.Count > 0 ? tarefas.Max(t => t.Id) + 1 : 1;
 
         tarefas.Add(new TaskItem
         {
@@ -85,6 +117,7 @@ class Program
 
     static void ConcluirTarefa()
     {
+        ListarTarefas();
         Console.Write("ID da tarefa a marcar como concluída: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
